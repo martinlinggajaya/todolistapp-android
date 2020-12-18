@@ -59,12 +59,13 @@ class TodoAdapter(
             val scale: Int = listener?.getScale()?.roundToInt()!!
             val constraintSet = ConstraintSet()
             constraintSet.clone(holder.layout)
-            constraintSet.connect(holder.tvTodoName.id, ConstraintSet.START, holder.layout.id, ConstraintSet.START, 16 * scale)
+//            constraintSet.connect(holder.tvTodoName.id, ConstraintSet.START, holder.layout.id, ConstraintSet.START, 16 * scale)
             constraintSet.connect(holder.tvTodoName.id, ConstraintSet.BOTTOM, holder.layout.id, ConstraintSet.BOTTOM, 12 * scale)
             constraintSet.applyTo(holder.layout)
         }
-        else{
+        else {
             val formatter = SimpleDateFormat("hh:mm a EEE, d MMM yyyy", Locale.ENGLISH)
+            holder.tvTodoDue.visibility = View.VISIBLE
             holder.tvTodoDue.text = formatter.format(todo.due!!)
         }
         if (todo.labelName == null) {

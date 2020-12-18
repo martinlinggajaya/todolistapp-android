@@ -94,4 +94,9 @@ class HomeFragment : Fragment(), TodoAdapter.RecyclerViewClickListener {
         super.onStop()
         todoAdapter?.stopListening()
     }
+
+    override fun onResume() {
+        super.onResume()
+        todoAdapter!!.notifyDataSetChanged()
+    }
 }
