@@ -51,13 +51,6 @@ class HomeFragment : Fragment(), TodoAdapter.RecyclerViewClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        btnSignOut.setOnClickListener {
-            Firebase.auth.signOut()
-            Log.d("cek", "Signed out")
-            val loginIntent = Intent(context, LoginActivity::class.java)
-            startActivity(loginIntent)
-        }
     }
 
     private fun setupRecyclerView() {
@@ -93,10 +86,5 @@ class HomeFragment : Fragment(), TodoAdapter.RecyclerViewClickListener {
     override fun onStop() {
         super.onStop()
         todoAdapter?.stopListening()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        todoAdapter!!.notifyDataSetChanged()
     }
 }

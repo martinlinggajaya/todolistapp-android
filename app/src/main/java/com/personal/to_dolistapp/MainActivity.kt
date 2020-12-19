@@ -24,11 +24,13 @@ import com.google.firebase.ktx.Firebase
 import com.personal.to_dolistapp.ui.auth.LoginActivity
 import com.personal.to_dolistapp.ui.home.HomeFragment
 import com.personal.to_dolistapp.ui.todo.AddTodoActivity
+import kotlinx.android.synthetic.main.nav_header_main.*
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var auth: FirebaseAuth
+    private lateinit var db: FirebaseFirestore
 
     companion object {
         private const val RC_SIGN_IN = 123
@@ -57,6 +59,33 @@ class MainActivity : AppCompatActivity() {
 
         // Initialize auth and db
         auth = Firebase.auth
+        db = FirebaseFirestore.getInstance()
+
+        // Set up navigation header text
+        if (auth.currentUser != null) {
+            var name = ""
+            val email = auth.currentUser!!.email!!
+            db.collection("users").document(email)
+                    .get()
+                    .addOnSuccessListener {
+                        val data = it?.data as MutableMap<String, *>
+                        name = data.getValue("name").toString()
+                        tvName.text = "Welcome, $name"
+                        tvEmailAddress.text = email
+                    }
+                    .addOnFailureListener {
+                        e -> Log.d("cek", e.toString())
+                    }
+        }
+
+        // Set up logout button
+        navView.menu.findItem(R.id.nav_signout).setOnMenuItemClickListener {
+            auth.signOut()
+            Log.d("cek", "Signed out")
+            val loginIntent = Intent(this, LoginActivity::class.java)
+            startActivity(loginIntent)
+            true
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

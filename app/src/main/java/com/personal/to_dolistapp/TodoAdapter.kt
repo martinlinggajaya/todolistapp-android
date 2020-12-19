@@ -53,19 +53,24 @@ class TodoAdapter(
         Log.d("cek", todo.toString())
 
         holder.tvTodoName.text = todo.name
+        val scale: Int = listener?.getScale()?.roundToInt()!!
         if (todo.due == null) {
             holder.tvTodoDue.visibility = View.GONE
             // Set margin if no date
-            val scale: Int = listener?.getScale()?.roundToInt()!!
             val constraintSet = ConstraintSet()
             constraintSet.clone(holder.layout)
-//            constraintSet.connect(holder.tvTodoName.id, ConstraintSet.START, holder.layout.id, ConstraintSet.START, 16 * scale)
             constraintSet.connect(holder.tvTodoName.id, ConstraintSet.BOTTOM, holder.layout.id, ConstraintSet.BOTTOM, 12 * scale)
             constraintSet.applyTo(holder.layout)
         }
         else {
             val formatter = SimpleDateFormat("hh:mm a EEE, d MMM yyyy", Locale.ENGLISH)
             holder.tvTodoDue.visibility = View.VISIBLE
+            // Clear bottom margin of to-do name
+            val constraintSet = ConstraintSet()
+            constraintSet.clone(holder.layout)
+            constraintSet.clear(holder.tvTodoName.id, ConstraintSet.BOTTOM)
+            constraintSet.applyTo(holder.layout)
+            // Set due text
             holder.tvTodoDue.text = formatter.format(todo.due!!)
         }
         if (todo.labelName == null) {
