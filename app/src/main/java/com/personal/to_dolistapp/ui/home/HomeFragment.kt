@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -18,6 +19,7 @@ import com.personal.to_dolistapp.R
 import com.personal.to_dolistapp.Todo
 import com.personal.to_dolistapp.TodoAdapter
 import com.personal.to_dolistapp.ui.auth.LoginActivity
+import com.personal.to_dolistapp.ui.todo.AddTodoActivity
 import com.personal.to_dolistapp.ui.todo.TodoDetailActivity
 import kotlinx.android.synthetic.main.fragment_home.*
 
@@ -51,11 +53,18 @@ class HomeFragment : Fragment(), TodoAdapter.RecyclerViewClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val fab: FloatingActionButton = view.findViewById(R.id.fab)
+        fab.setOnClickListener {
+            val intent = Intent(context, AddTodoActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun setupRecyclerView() {
         // Initialize adapter for rvTodo
-        val query = db.collection("users").document(auth.currentUser!!.email!!).collection("todos")
+        val query = db.collection("users").document(auth.currentUser!!.email!!)
+                .collection("todos").whereEqualTo("done", false)
         val options = FirestoreRecyclerOptions.Builder<Todo>()
                     .setQuery(query, Todo::class.java)
                     .build()
@@ -76,6 +85,12 @@ class HomeFragment : Fragment(), TodoAdapter.RecyclerViewClickListener {
 
     override fun getScale(): Float {
         return resources.displayMetrics.density
+    }
+
+    override fun finishTodo(todo: Todo) {
+        db.collection("users").document(auth.currentUser!!.email!!)
+                .collection("todos").document(todo.id!!)
+                .update("done", true)
     }
 
     override fun onStart() {

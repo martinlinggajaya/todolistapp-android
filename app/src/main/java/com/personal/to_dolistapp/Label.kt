@@ -5,6 +5,6 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class Label (
-    var name: String,       // Pake sebagai ID juga
-    var color: String
+    var name: String = "",       // Pake sebagai ID juga
+    var color: String = ""
 ) : Parcelable

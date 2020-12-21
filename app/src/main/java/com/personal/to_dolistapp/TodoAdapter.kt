@@ -30,11 +30,13 @@ class TodoAdapter(
 
     interface RecyclerViewClickListener {
         fun openTodo(view: View, todo: Todo)
+        fun finishTodo(todo: Todo)
         fun getScale(): Float
     }
 
     inner class ListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var tvTodoName: CheckBox = itemView.cbTodoCheckbox
+        var tvTodoName: TextView = itemView.tvTodoName
+        var cbDone: CheckBox = itemView.cbTodoCheckbox
         var tvTodoDue: TextView = itemView.tvTodoDue
         var ivLabelColor: ImageView = itemView.ivLabelColor
         var cvTodo: CardView = itemView.cvTodo
@@ -92,8 +94,12 @@ class TodoAdapter(
         }
 
         holder.cvTodo.setOnClickListener {
-            Log.d("cek", "clicked")
+//            Log.d("cek", "clicked")
             listener?.openTodo(it, todo)
+        }
+
+        holder.cbDone.setOnClickListener {
+            listener?.finishTodo(todo)
         }
     }
 

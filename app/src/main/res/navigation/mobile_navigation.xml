@@ -12,10 +12,10 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/nav_add_label"
-        android:name="com.personal.to_dolistapp.ui.label.AddLabelFragment"
-        android:label="Add Label"
-        tools:layout="@layout/fragment_add_label" />
+        android:id="@+id/nav_label_list"
+        android:name="com.personal.to_dolistapp.ui.label.LabelListFragment"
+        android:label="Label List"
+        tools:layout="@layout/fragment_label_list" />
 
     <fragment
         android:id="@+id/nav_slideshow"

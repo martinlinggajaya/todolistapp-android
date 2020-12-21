@@ -37,13 +37,24 @@
 
         <CheckBox
             android:id="@+id/cbTodoCheckbox"
-            android:layout_width="wrap_content"
+            android:layout_width="28dp"
             android:layout_height="28dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="12dp"
-            android:text="Nama Todo"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvTodoName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="12dp"
+            android:text="TextView"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            app:layout_constraintStart_toEndOf="@+id/cbTodoCheckbox"
             app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
