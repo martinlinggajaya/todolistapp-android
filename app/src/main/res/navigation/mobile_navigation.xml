@@ -16,10 +16,4 @@
         android:name="com.personal.to_dolistapp.ui.label.LabelListFragment"
         android:label="Label List"
         tools:layout="@layout/fragment_label_list" />
-
-    <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="com.personal.to_dolistapp.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
 </navigation>

@@ -1,12 +1,11 @@
 package com.personal.to_dolistapp
 
-import android.content.Context
-import com.personal.to_dolistapp.R
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
+import android.widget.Filter
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
@@ -16,7 +15,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import kotlinx.android.synthetic.main.item_todo.view.*
-import java.security.AccessController.getContext
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.roundToInt
@@ -102,5 +100,4 @@ class TodoAdapter(
             listener?.finishTodo(todo)
         }
     }
-
 }

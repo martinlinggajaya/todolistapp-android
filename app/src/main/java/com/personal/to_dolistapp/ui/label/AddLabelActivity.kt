@@ -23,7 +23,7 @@ class AddLabelActivity : AppCompatActivity() {
     private val spinnerListener by lazy {
         object : MaterialSpinner.OnItemSelectedListener {
             override fun onItemSelected(parent: MaterialSpinner, view: View?, position: Int, id: Long) {
-                selectedColor = labelColors[position] // position 0 = no label
+                selectedColor = labelColors[position]
                 selectedColor = selectedColor.toLowerCase()
 //                Log.v("MaterialSpinner", "onItemSelected parent=${parent.id}, position=$position")
                 when (selectedColor) {
