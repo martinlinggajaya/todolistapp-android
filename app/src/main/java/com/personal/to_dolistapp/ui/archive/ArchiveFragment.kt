@@ -1,28 +1,27 @@
-package com.personal.to_dolistapp.ui.home
+package com.personal.to_dolistapp.ui.archive
 
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.SearchView
 import android.widget.Spinner
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
-import com.personal.to_dolistapp.*
-import com.personal.to_dolistapp.ui.todo.AddTodoActivity
+import com.personal.to_dolistapp.R
+import com.personal.to_dolistapp.Todo
+import com.personal.to_dolistapp.TodoAdapter
 import com.personal.to_dolistapp.ui.todo.TodoDetailActivity
-import com.tiper.MaterialSpinner
-import kotlinx.android.synthetic.main.fragment_home.*
 
-class HomeFragment : Fragment(), TodoAdapter.RecyclerViewClickListener {
+class ArchiveFragment: Fragment(), TodoAdapter.RecyclerViewClickListener {
 
     private lateinit var auth: FirebaseAuth
     private lateinit var db: FirebaseFirestore
@@ -41,11 +40,11 @@ class HomeFragment : Fragment(), TodoAdapter.RecyclerViewClickListener {
                 val newQuery: Query
                 if (labelSelectedName == "All") {
                     newQuery = db.collection("users").document(auth.currentUser!!.email!!)
-                            .collection("todos").whereEqualTo("done", false)
+                            .collection("todos").whereEqualTo("done", true)
                 }
                 else {
                     newQuery = db.collection("users").document(auth.currentUser!!.email!!)
-                            .collection("todos").whereEqualTo("done", false).whereEqualTo("labelName", labelSelectedName)
+                            .collection("todos").whereEqualTo("done", true).whereEqualTo("labelName", labelSelectedName)
                 }
                 val newOptions = FirestoreRecyclerOptions.Builder<Todo>()
                         .setQuery(newQuery, Todo::class.java)
@@ -63,12 +62,12 @@ class HomeFragment : Fragment(), TodoAdapter.RecyclerViewClickListener {
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_home, container, false)
+        val view = inflater.inflate(R.layout.fragment_archive, container, false)
 
         auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
 
-        todoList = view.findViewById(R.id.rvTodo)
+        todoList = view.findViewById(R.id.rvArchiveTodo)
         if (auth.currentUser != null) {
             setupRecyclerView()
         }
@@ -81,14 +80,8 @@ class HomeFragment : Fragment(), TodoAdapter.RecyclerViewClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val fab: FloatingActionButton = view.findViewById(R.id.fab)
-        fab.setOnClickListener {
-            val intent = Intent(context, AddTodoActivity::class.java)
-            startActivity(intent)
-        }
-
         // Set up spinner --------------------------------------------------------------------------
-        val spinner: Spinner = view.findViewById(R.id.spFilter)
+        val spinner: Spinner = view.findViewById(R.id.spArchiveFilter)
         db.collection("users").document(auth.currentUser!!.email!!)
                 .collection("labels").get()
                 .addOnSuccessListener {
@@ -111,13 +104,13 @@ class HomeFragment : Fragment(), TodoAdapter.RecyclerViewClickListener {
     private fun setupRecyclerView() {
         // Initialize adapter for rvTodo
         val query = db.collection("users").document(auth.currentUser!!.email!!)
-                .collection("todos").whereEqualTo("done", false)
+                .collection("todos").whereEqualTo("done", true)
         val options = FirestoreRecyclerOptions.Builder<Todo>()
-                    .setQuery(query, Todo::class.java)
-                    .build()
+                .setQuery(query, Todo::class.java)
+                .build()
         todoAdapter = TodoAdapter(options)
         todoAdapter!!.notifyDataSetChanged()
-        // Initialize rvTodo
+        // Initialize rvArchiveTodo
         todoList.layoutManager = LinearLayoutManager(context)
         todoList.adapter = todoAdapter
     }
@@ -137,7 +130,7 @@ class HomeFragment : Fragment(), TodoAdapter.RecyclerViewClickListener {
     override fun checkTodo(todo: Todo) {
         db.collection("users").document(auth.currentUser!!.email!!)
                 .collection("todos").document(todo.id!!)
-                .update("done", true)
+                .update("done", false)
     }
 
     override fun onStart() {

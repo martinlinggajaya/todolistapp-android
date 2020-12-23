@@ -28,7 +28,7 @@ class TodoAdapter(
 
     interface RecyclerViewClickListener {
         fun openTodo(view: View, todo: Todo)
-        fun finishTodo(todo: Todo)
+        fun checkTodo(todo: Todo)
         fun getScale(): Float
     }
 
@@ -91,13 +91,15 @@ class TodoAdapter(
             holder.ivLabelColor.setImageResource(circleResource)
         }
 
+        holder.cbDone.isChecked = todo.done
+
         holder.cvTodo.setOnClickListener {
 //            Log.d("cek", "clicked")
             listener?.openTodo(it, todo)
         }
 
         holder.cbDone.setOnClickListener {
-            listener?.finishTodo(todo)
+            listener?.checkTodo(todo)
         }
     }
 }
