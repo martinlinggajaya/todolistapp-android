@@ -50,8 +50,6 @@ class TodoAdapter(
 
         todo.id = snapshots.getSnapshot(position).id
 
-        Log.d("cek", todo.toString())
-
         holder.tvTodoName.text = todo.name
         val scale: Int = listener?.getScale()?.roundToInt()!!
         if (todo.due == null) {

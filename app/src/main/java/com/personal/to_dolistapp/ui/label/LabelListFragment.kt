@@ -66,10 +66,36 @@ class LabelListFragment : Fragment(), LabelAdapter.RecyclerViewClickListener {
     }
 
     override fun deleteLabel(label: Label) {
+        val todoIDsToClear = arrayListOf<String>()
         db.collection("users").document(auth.currentUser!!.email!!)
                 .collection("labels").document(label.name).delete()
                 .addOnSuccessListener {
                     Toast.makeText(context, "Label terhapus", Toast.LENGTH_SHORT).show()
+                    // Get IDs of to-dos with label
+                    db.collection("users").document(auth.currentUser!!.email!!)
+                            .collection("todos").whereEqualTo("labelName", label.name)
+                            .get()
+                            .addOnSuccessListener {
+                                for (todo in it) {
+                                    todoIDsToClear.add(todo.id)
+                                }
+                                Log.d("cek", todoIDsToClear.toString())
+                                // Update each to-do and remove their labels
+                                val batch = db.batch()
+                                val documentReference = db.collection("users").document(auth.currentUser!!.email!!)
+                                        .collection("todos")
+                                todoIDsToClear.forEach {
+                                    batch.update(documentReference.document(it), "labelName", null)
+                                    batch.update(documentReference.document(it), "labelColor", null)
+                                }
+                                batch.commit()
+                                        .addOnSuccessListener {
+                                            Log.d("cek", "Successfully removed label from to-dos")
+                                        }
+                                        .addOnFailureListener {
+                                            e -> Log.d("cek", e.toString())
+                                        }
+                            }
                 }
                 .addOnFailureListener {
                     e -> Log.d("cek", e.toString())

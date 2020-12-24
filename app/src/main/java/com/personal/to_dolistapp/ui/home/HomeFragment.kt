@@ -95,7 +95,7 @@ class HomeFragment : Fragment(), TodoAdapter.RecyclerViewClickListener {
                     for (label in it) {
                         labelNameList.add(label.data["name"].toString())
                     }
-                    Log.d("cek", labelNameList.toString())
+//                    Log.d("cek", labelNameList.toString())
                     val arrayAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, labelNameList)
                     arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                     spinner.apply {

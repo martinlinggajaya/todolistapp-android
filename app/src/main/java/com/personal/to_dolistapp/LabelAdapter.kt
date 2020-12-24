@@ -14,7 +14,7 @@ import kotlinx.android.synthetic.main.item_label.view.*
 class LabelAdapter (options: FirestoreRecyclerOptions<Label>
 ) : FirestoreRecyclerAdapter<Label, LabelAdapter.ListViewHolder>(options) {
 
-    var listener : LabelAdapter.RecyclerViewClickListener? = null
+    var listener : RecyclerViewClickListener? = null
 
     interface RecyclerViewClickListener {
         fun deleteLabel(label: Label)
