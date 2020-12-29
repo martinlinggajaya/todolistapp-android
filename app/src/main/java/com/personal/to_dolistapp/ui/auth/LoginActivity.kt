@@ -32,9 +32,9 @@ class LoginActivity : AppCompatActivity() {
                     if (task.isSuccessful) {
                         // Sign in success
                         Log.d("cek", "Sign in success")
-//                        val mainIntent = Intent(this, MainActivity::class.java)
-//                        startActivity(mainIntent)
-                        finish()       // back to main
+                        finish()
+                        val mainIntent = Intent(this, MainActivity::class.java)
+                        startActivity(mainIntent)   // start to main
                     } else {
                         Log.w("cek", "Sign in failed", task.exception)
                         Toast.makeText(baseContext, "Failed to login.", Toast.LENGTH_SHORT).show()
@@ -43,6 +43,7 @@ class LoginActivity : AppCompatActivity() {
         }
 
         btnToRegister.setOnClickListener {
+            finish()
             val registerIntent = Intent(this, RegisterActivity::class.java)
             startActivity(registerIntent)
         }

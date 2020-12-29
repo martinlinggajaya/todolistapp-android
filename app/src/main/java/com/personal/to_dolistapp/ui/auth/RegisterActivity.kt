@@ -46,6 +46,7 @@ class RegisterActivity : AppCompatActivity() {
                             .set(newUser)
 
                         // Redirect to main
+                        finish()
                         val mainIntent = Intent(this, MainActivity::class.java)
                         startActivity(mainIntent)
                     }
@@ -58,6 +59,7 @@ class RegisterActivity : AppCompatActivity() {
         }
 
         btnToLogin.setOnClickListener {
+            finish()
             val loginIntent = Intent(this, LoginActivity::class.java)
             startActivity(loginIntent)
         }

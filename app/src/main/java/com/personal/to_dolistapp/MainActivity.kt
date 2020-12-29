@@ -71,6 +71,7 @@ class MainActivity : AppCompatActivity() {
         navView.menu.findItem(R.id.nav_signout).setOnMenuItemClickListener {
             auth.signOut()
             Log.d("cek", "Signed out")
+            finish()
             val loginIntent = Intent(this, LoginActivity::class.java)
             startActivity(loginIntent)
             true
@@ -95,6 +96,7 @@ class MainActivity : AppCompatActivity() {
         val currentUser = auth.currentUser
         Log.d("cek", currentUser.toString())
         if (currentUser == null) {
+            finish()
             val loginIntent = Intent(this, LoginActivity::class.java)
             startActivity(loginIntent)
         }

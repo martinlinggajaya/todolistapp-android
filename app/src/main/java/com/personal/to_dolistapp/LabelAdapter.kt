@@ -1,5 +1,6 @@
 package com.personal.to_dolistapp
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,12 +10,17 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.item_label.view.*
+import org.w3c.dom.Text
 
 class LabelAdapter (options: FirestoreRecyclerOptions<Label>
 ) : FirestoreRecyclerAdapter<Label, LabelAdapter.ListViewHolder>(options) {
 
     var listener : RecyclerViewClickListener? = null
+    lateinit var db: FirebaseFirestore
+    lateinit var auth: FirebaseAuth
 
     interface RecyclerViewClickListener {
         fun deleteLabel(label: Label)
@@ -23,6 +29,7 @@ class LabelAdapter (options: FirestoreRecyclerOptions<Label>
     inner class ListViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         var tvLabelName: TextView = itemView.tvLabelItemName
         var ivLabelColor: ImageView = itemView.ivLabelItemColor
+        var tvLabelCounter: TextView = itemView.tvCount
         var btnLabelDelete: ImageButton = itemView.btnLabelItemDelete
     }
 
@@ -48,6 +55,24 @@ class LabelAdapter (options: FirestoreRecyclerOptions<Label>
 
         holder.btnLabelDelete.setOnClickListener {
             listener?.deleteLabel(label)
+        }
+
+        db = FirebaseFirestore.getInstance()
+        auth = FirebaseAuth.getInstance()
+        var count = 0
+        if (auth.currentUser != null) {
+            db.collection("users").document(auth.currentUser!!.email!!)
+                    .collection("todos").whereEqualTo("labelName", label.name).get()
+                    .addOnSuccessListener {
+                        for (document in it) {
+                            count++
+                        }
+                        label.count = count
+                        holder.tvLabelCounter.text = count.toString()
+                    }
+                    .addOnFailureListener {
+                        e -> Log.d("cek", e.toString())
+                    }
         }
     }
 

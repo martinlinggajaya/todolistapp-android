@@ -89,23 +89,25 @@ class HomeFragment : Fragment(), TodoAdapter.RecyclerViewClickListener {
 
         // Set up spinner --------------------------------------------------------------------------
         val spinner: Spinner = view.findViewById(R.id.spFilter)
-        db.collection("users").document(auth.currentUser!!.email!!)
-                .collection("labels").get()
-                .addOnSuccessListener {
-                    for (label in it) {
-                        labelNameList.add(label.data["name"].toString())
-                    }
+        if (auth.currentUser != null) {
+            db.collection("users").document(auth.currentUser!!.email!!)
+                    .collection("labels").get()
+                    .addOnSuccessListener {
+                        for (label in it) {
+                            labelNameList.add(label.data["name"].toString())
+                        }
 //                    Log.d("cek", labelNameList.toString())
-                    val arrayAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, labelNameList)
-                    arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                    spinner.apply {
-                        adapter = arrayAdapter
-                        onItemSelectedListener = spinnerListener
+                        val arrayAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, labelNameList)
+                        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                        spinner.apply {
+                            adapter = arrayAdapter
+                            onItemSelectedListener = spinnerListener
+                        }
                     }
-                }
-                .addOnFailureListener { e ->
-                    Log.d("cek", e.toString())
-                }
+                    .addOnFailureListener { e ->
+                        Log.d("cek", e.toString())
+                    }
+        }
     }
 
     private fun setupRecyclerView() {
